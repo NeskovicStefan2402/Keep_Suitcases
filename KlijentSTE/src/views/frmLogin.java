@@ -63,7 +63,8 @@ public class frmLogin extends javax.swing.JFrame {
         jLabelUsername.setFont(new java.awt.Font("DialogInput", 1, 14)); // NOI18N
         jLabelUsername.setText("Korisnicko ime:");
 
-        jTxtUsername.setFont(new java.awt.Font("DialogInput", 0, 14)); // NOI18N
+        jTxtUsername.setFont(new java.awt.Font("DialogInput", 0, 18)); // NOI18N
+        jTxtUsername.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTxtUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTxtUsernameActionPerformed(evt);
@@ -99,7 +100,8 @@ public class frmLogin extends javax.swing.JFrame {
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/kofer.png"))); // NOI18N
 
-        jPasswordField1.setFont(new java.awt.Font("DialogInput", 0, 12)); // NOI18N
+        jPasswordField1.setFont(new java.awt.Font("DialogInput", 0, 18)); // NOI18N
+        jPasswordField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -202,7 +204,7 @@ public class frmLogin extends javax.swing.JFrame {
             this.dispose();
             //JFrame forma=new FrmMain(controller);
             JFrame forma=new frmMenu(radnik);
-            forma.setTitle("Zdravo bio "+radnik.getIme()+" "+radnik.getPrezime());
+            forma.setTitle("Informacioni sistem KEEPSUITCASE");
             forma.setVisible(true);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Greška prilikom prijavljivanja radnika!", JOptionPane.ERROR_MESSAGE);

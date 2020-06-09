@@ -458,6 +458,12 @@ public class frmTransakcija extends javax.swing.JFrame {
             if(racun.getKlijent()!=null){
                 CommunicationController.getInstance().getRacun().setRadnik(radnik);
                 CommunicationController.getInstance().kreirajRacun();
+                refreshFunkcija();
+                setVisible(false);
+                JFrame menu =new frmMenu(radnik);
+                menu.pack();
+                menu.setLocationByPlatform(true);
+                menu.setVisible(true);
             }else{
                 JOptionPane.showMessageDialog(this, "Niste uneli korisnika!");
             }
@@ -646,7 +652,7 @@ public void refreshFunkcija(){
                 txtKorisnikRacun.setText(CommunicationController.getInstance().getRacun().getKlijent().getIme()+" "+CommunicationController.getInstance().getRacun().getKlijent().getPrezime());
                 txtKontaktRacun.setText(CommunicationController.getInstance().getRacun().getKlijent().getKontaktBroj());
                 txtJMBGRacun.setText(CommunicationController.getInstance().getRacun().getKlijent().getJMBG());
-                txtSumaRacun.setText(CommunicationController.getInstance().getSuma()+"kg");
+                txtSumaRacun.setText(CommunicationController.getInstance().getSuma(CommunicationController.getInstance().getRacun())+"kg");
             }
         } catch (IOException ex) {
             Logger.getLogger(frmTransakcija.class.getName()).log(Level.SEVERE, null, ex);

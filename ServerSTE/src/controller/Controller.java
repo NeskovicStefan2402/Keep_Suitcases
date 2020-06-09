@@ -211,6 +211,17 @@ public class Controller {
 //        return serviceInvoice.save(invoice);
 //    }
 
+    public Racun odpremiRacun(Racun racun) {
+        Racun rez=null;
+        try {
+            rez = serviceRacun.predajRacun(racun);
+            return rez;
+        } catch (Exception ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rez;
+    }
+
     
     
     

@@ -10,6 +10,8 @@ import domain.Prtljag;
 import domain.Radnik;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,13 +24,15 @@ public class Racun implements Serializable{
     Long idRacuna;
     Korisnik klijent;
     Radnik radnik;
+    float cena=0;
     List<StavkaRacuna> stavke;
-    Date predatoVreme;
-    Date preuzetoVreme;
+    LocalDateTime predatoVreme;
+    LocalDateTime preuzetoVreme;
 
-    public Racun(Long idRacuna, Korisnik klijent, Radnik radnik, List<StavkaRacuna> stavke, Date predatoVreme, Date preuzetoVreme) {
+    public Racun(float cena,Long idRacuna, Korisnik klijent, Radnik radnik, List<StavkaRacuna> stavke, LocalDateTime predatoVreme, LocalDateTime preuzetoVreme) {
         this.idRacuna = idRacuna;
         this.klijent = klijent;
+        this.cena=cena;
         this.radnik = radnik;
         this.stavke = stavke;
         this.predatoVreme = predatoVreme;
@@ -55,6 +59,14 @@ public class Racun implements Serializable{
         this.klijent = klijent;
     }
 
+    public float getCena() {
+        return cena;
+    }
+
+    public void setCena(float cena) {
+        this.cena = cena;
+    }
+
     public Radnik getRadnik() {
         return radnik;
     }
@@ -71,20 +83,24 @@ public class Racun implements Serializable{
         this.stavke = stavke;
     }
 
-    public Date getPredatoVreme() {
+    public LocalDateTime getPredatoVreme() {
         return predatoVreme;
     }
 
-    public void setPredatoVreme(Date predatoVreme) {
+    public void setPredatoVreme(LocalDateTime predatoVreme) {
         this.predatoVreme = predatoVreme;
     }
 
-    public Date getPreuzetoVreme() {
+    public LocalDateTime getPreuzetoVreme() {
         return preuzetoVreme;
     }
 
-    public void setPreuzetoVreme(Date preuzetoVreme) {
+    public void setPreuzetoVreme(LocalDateTime preuzetoVreme) {
         this.preuzetoVreme = preuzetoVreme;
+    }
+
+    public void setPreuzetoVreme(Timestamp date) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

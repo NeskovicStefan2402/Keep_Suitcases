@@ -43,5 +43,13 @@ public class ServiceRacun {
         return null;
     }
     
+    public Racun predajRacun(Racun racun){
+        try {
+            return storageDBRacun.update(racun);
+        } catch (Exception ex) {
+            Logger.getLogger(ServiceRacun.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
 }

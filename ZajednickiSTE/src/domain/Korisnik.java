@@ -89,6 +89,11 @@ public class Korisnik implements Serializable{
         this.sifra = sifra;
     }
 
+    @Override
+    public String toString() {
+        return idKorisnika + " : " + ime + " " + prezime ;
+    }
+
     
     
     

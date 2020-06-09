@@ -5,7 +5,13 @@
  */
 package views;
 import components.TableModelIzvestaj;
-import controller.Controller;
+import controller.CommunicationController;
+import domain.Racun;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.TableModel;
 /**
  *
@@ -64,7 +70,7 @@ public class frmIzvestajSvihTransakcija extends javax.swing.JPanel {
         jLblSuma.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLblSuma.setText("Suma");
 
-        jLabel3.setText("----------------------------------------------------------");
+        jLabel3.setText("-----------------------------------------------------------------------------------------------------");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -83,9 +89,9 @@ public class frmIzvestajSvihTransakcija extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(21, 21, 21)
-                                .addComponent(jLblSuma, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLblSuma, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -133,9 +139,14 @@ public class frmIzvestajSvihTransakcija extends javax.swing.JPanel {
     private javax.swing.JTable jTableIzvestaj;
     // End of variables declaration//GEN-END:variables
     public void uPozadini(){
-        TableModel model=new TableModelIzvestaj(Controller.getInstance().vratiRacune());
-        jTableIzvestaj.setModel(model);
-        jLblSuma.setText(Controller.getInstance().vratiSumuRacuna()+" RSD");
+        try {
+            List<Racun> racuni =CommunicationController.getInstance().vratiIstoriju();
+            TableModel model=new TableModelIzvestaj(racuni);
+            jTableIzvestaj.setModel(model);
+            jLblSuma.setText(CommunicationController.getInstance().vratiSumuRacuna(racuni)+" RSD");
+        } catch (IOException ex) {
+            Logger.getLogger(frmIzvestajSvihTransakcija.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

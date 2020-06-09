@@ -11,8 +11,12 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.table.TableModel;
 import controller.*;
+import domain.Korisnik;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 /**
  *
@@ -24,10 +28,15 @@ public class frmPretraga extends javax.swing.JPanel {
      * Creates new form frmPretraga
      */
     public frmPretraga() {
-        initComponents();
-        racuni=Controller.getInstance().vratiRacune();
-        popuniComboKlijenata();
-        uPozadini(Controller.getInstance().vratiRacune());
+        try {
+            initComponents();
+            racuni=CommunicationController.getInstance().vratiTrenutnoStanje();
+            racuni.addAll(CommunicationController.getInstance().vratiIstoriju());
+            popuniComboKlijenata();
+            uPozadini(racuni);
+        } catch (IOException ex) {
+            Logger.getLogger(frmPretraga.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -75,7 +84,13 @@ public class frmPretraga extends javax.swing.JPanel {
         });
 
         jLabel1.setFont(new java.awt.Font("DialogInput", 1, 24)); // NOI18N
-        jLabel1.setText("Pretraga prtljaga");
+        jLabel1.setText("Pretraga racuna");
+
+        jComboBoxKlijenti.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxKlijentiActionPerformed(evt);
+            }
+        });
 
         jTxtTezina.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,26 +140,26 @@ public class frmPretraga extends javax.swing.JPanel {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(177, 177, 177)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addGap(104, 104, 104))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(177, 177, 177)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
+                        .addGap(69, 69, 69)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(66, 66, 66)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -188,36 +203,53 @@ public class frmPretraga extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         List<Racun> racuni1=new ArrayList<>();
         if(!jComboBoxKlijenti.getSelectedItem().toString().equals("Nista")){
-            racuni1=Controller.getInstance().vratiKlijentRacun(jComboBoxKlijenti.getSelectedItem().toString(),racuni);
-            if(jTxtTezina.getText().isEmpty()){
-                JOptionPane.showMessageDialog(this, "Popunite polje tezina!");
-            }else if(Controller.getInstance().daLiJeBroj(jTxtTezina.getText())){
-                if(jComboBoxUslov.getSelectedItem().toString().equals(">"))
-                    racuni1=Controller.getInstance().vratiVece(Integer.parseInt(jTxtTezina.getText()),racuni1);
-                else if(jComboBoxUslov.getSelectedItem().toString().equals("<"))
-                    racuni1=Controller.getInstance().vratiManje(Integer.parseInt(jTxtTezina.getText()),racuni1);
-                else if(jComboBoxUslov.getSelectedItem().toString().equals("="))
-                    racuni1=Controller.getInstance().vratiIste(Integer.parseInt(jTxtTezina.getText()),racuni1);
-            }else{
-                JOptionPane.showMessageDialog(this, "Popunite polje tezina validnim vrednostima!");
+            try {
+                racuni1=CommunicationController.getInstance().vratiKlijentRacun((Korisnik) jComboBoxKlijenti.getSelectedItem(),racuni);
+                if(jTxtTezina.getText().isEmpty()){
+                    JOptionPane.showMessageDialog(this, "Popunite polje tezina!");
+                }else if(CommunicationController.getInstance().daLiJeBroj(jTxtTezina.getText())){
+                    if(jComboBoxUslov.getSelectedItem().toString().equals(">"))
+                        racuni1=CommunicationController.getInstance().vratiVece(Integer.parseInt(jTxtTezina.getText()),racuni1);
+                    else if(jComboBoxUslov.getSelectedItem().toString().equals("<"))
+                        racuni1=CommunicationController.getInstance().vratiManje(Integer.parseInt(jTxtTezina.getText()),racuni1);
+                    else if(jComboBoxUslov.getSelectedItem().toString().equals("="))
+                        racuni1=CommunicationController.getInstance().vratiIste(Integer.parseInt(jTxtTezina.getText()),racuni1);
+                }else{
+                    JOptionPane.showMessageDialog(this, "Popunite polje tezina validnim vrednostima!");
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(frmPretraga.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else{
             if(jTxtTezina.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this, "Popunite polje tezina!");
-            }else if(Controller.getInstance().daLiJeBroj(jTxtTezina.getText())){
-                if(jComboBoxUslov.getSelectedItem().toString().equals(">"))
-                    racuni1=Controller.getInstance().vratiVece(Integer.parseInt(jTxtTezina.getText()),racuni);
-                else if(jComboBoxUslov.getSelectedItem().toString().equals("<"))
-                    racuni1=Controller.getInstance().vratiManje(Integer.parseInt(jTxtTezina.getText()),racuni);
-                else if(jComboBoxUslov.getSelectedItem().toString().equals("="))
-                    racuni1=Controller.getInstance().vratiIste(Integer.parseInt(jTxtTezina.getText()),racuni);
-            }else{
-                JOptionPane.showMessageDialog(this, "Popunite polje tezina validnim vrednostima!");
+            }else try {
+                        
+                if(CommunicationController.getInstance().daLiJeBroj(jTxtTezina.getText())){
+                    if(jComboBoxUslov.getSelectedItem().toString().equals(">"))
+                            racuni1=CommunicationController.getInstance().vratiVece(Integer.parseInt(jTxtTezina.getText()),racuni);
+                    else if(jComboBoxUslov.getSelectedItem().toString().equals("<"))
+                           racuni1=CommunicationController.getInstance().vratiManje(Integer.parseInt(jTxtTezina.getText()),racuni);
+                    else if(jComboBoxUslov.getSelectedItem().toString().equals("="))
+                            racuni1=CommunicationController.getInstance().vratiIste(Integer.parseInt(jTxtTezina.getText()),racuni);
+                    
+                }else{
+                    JOptionPane.showMessageDialog(this, "Popunite polje tezina validnim vrednostima!");
+                }
+                
+            } catch (IOException ex) {
+                Logger.getLogger(frmPretraga.class.getName()).log(Level.SEVERE, null, ex);
             }
-      
+  
+        }
+        uPozadini(racuni1);
     }//GEN-LAST:event_jButton1ActionPerformed
-    uPozadini(racuni1);  
-    }
+
+    private void jComboBoxKlijentiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxKlijentiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxKlijentiActionPerformed
+  
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -234,13 +266,26 @@ public class frmPretraga extends javax.swing.JPanel {
     private javax.swing.JTextField jTxtTezina;
     // End of variables declaration//GEN-END:variables
     public void uPozadini(List<Racun> lista){
+        
         TableModel model=new TableModelIzvestaj(lista);
+//        for (int i = 0; i < lista.size(); i++) {
+//            if(lista.get(i).getPreuzetoVreme()==null){
+//                Promena boje reda
+//            }else{
+//                
+//            }
+//        }
         jTable1.setModel(model);
-        }
+    }
     public void popuniComboKlijenata(){
-        jComboBoxKlijenti.addItem("Nista");
-        for(int i=0;i<Controller.getInstance().vratiSveKlijente().size();i++){
-            jComboBoxKlijenti.addItem(Controller.getInstance().vratiSveKlijente().get(i).toString());
+        try {
+            jComboBoxKlijenti.addItem("Nista");
+            List<Korisnik> korisnici =CommunicationController.getInstance().vratiSveKlijente();
+            for(int i=0;i<korisnici.size();i++){
+                jComboBoxKlijenti.addItem(korisnici.get(i));
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(frmPretraga.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

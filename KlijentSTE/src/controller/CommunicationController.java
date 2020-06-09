@@ -18,7 +18,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.net.Socket;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -260,7 +263,26 @@ public class CommunicationController {
         }
         return null;
     }
-
+    public List<Racun> vratiIstoriju() {
+        try {
+            RequestObject request=new RequestObject();
+            request.setOperation(Operation.Operacija_Vrati_IzvestajRacuna);
+            
+            sendRequest(request);
+            ResponseObject response=receiveResponse();
+            if(response.getException()!=null){
+                throw response.getException();
+            }
+            return (List<Racun>) response.getData();
+        } catch (IOException ex) {
+            Logger.getLogger(CommunicationController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CommunicationController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(CommunicationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     public boolean proveriFormat(String username){
         if(username.length()>7 && brojVelikihSlova(username)>0){
             return true;
@@ -316,12 +338,27 @@ public class CommunicationController {
                racun.getStavke().remove(i);
         }
     }
-    public float getSuma(){
+    public float getSuma(Racun racun){
         float suma=0;
         for(int i = 0; i < racun.getStavke().size(); i++) {
            suma+=racun.getStavke().get(i).getPrtljag().getTezina();
         }
         return suma;
+    }
+    public float getUkupnaCena(Racun racun){
+       float suma=0;
+        for(int i = 0; i < racun.getStavke().size(); i++) {
+           suma+=racun.getStavke().get(i).getCena()*((int)racun.getStavke().get(i).getPrtljag().getTezina());
+        }
+        float datum =racun.getPreuzetoVreme().getDayOfYear()-racun.getPredatoVreme().getDayOfYear();
+        float vreme =getSecondDuration(racun.getPreuzetoVreme())-getSecondDuration(racun.getPredatoVreme());
+        return (datum+vreme/3600)*suma;
+    }
+    private long getSecondDuration(LocalDateTime t) {
+    long h = t.getHour();
+    long m = t.getMinute();
+    long s = t.getSecond();
+    return  (h * 3600) + (m * 60) + s;
     }
 //    public boolean preuzetaPrijemenica(Prijemnica prijemnica){
 //        for(int i=0;i<vratiSvePrijemnice().size();i++){
@@ -346,57 +383,76 @@ public class CommunicationController {
 //    public List<Racun> vratiRacune(){
 //        return storageRacun.vratiRacune();
 //    }
-//    public BigDecimal vratiSumuRacuna(){
-//        BigDecimal suma=new BigDecimal(0);
-//        for(int i=0;i<vratiRacune().size();i++){
-//            suma=suma.add(vratiRacune().get(i).getCena());
-//        }
-//        return suma;
-//    }
+    public float vratiSumuRacuna(List<Racun> racuni){
+        float suma=0;
+        for(int i=0;i<racuni.size();i++){
+            suma+=racuni.get(i).getCena();
+        }
+        return suma;
+    }
 //    
-//    public List<Racun> vratiVece(int broj,List<Racun> lista){
-//        List<Racun> racuni=new ArrayList<Racun>();
-//        if(!lista.isEmpty()){
-//        for(int i=0;i<lista.size();i++){
-//            if(lista.get(i).getPrtljag().getTezina()>broj){
-//                racuni.add(lista.get(i));
-//            }
-//        }}
-//        return racuni;
-//    }
-//    public List<Racun> vratiManje(int broj,List<Racun> lista){
-//        List<Racun> racuni=new ArrayList<Racun>();
-//        if(!lista.isEmpty()){
-//        for(int i=0;i<lista.size();i++){
-//            if(lista.get(i).getPrtljag().getTezina()<broj){
-//                racuni.add(lista.get(i));
-//            }
-//        }
-//        }
-//        return racuni;
-//    }
-//    public List<Racun> vratiIste(int broj,List<Racun> lista){
-//        List<Racun> racuni=new ArrayList<Racun>();
-//        if(!lista.isEmpty()){
-//        for(int i=0;i<lista.size();i++){
-//            if(lista.get(i).getPrtljag().getTezina()==broj){
-//                racuni.add(lista.get(i));
-//            }
-//        }
-//        }
-//        return racuni;
-//    }
-//    public List<Racun> vratiKlijentRacun(String klijent,List<Racun> lista){
-//        String[] elementi=klijent.split(" ");
-//        List<Racun> racuni=new ArrayList<Racun>();
-//        for(int i=0;i<lista.size();i++){
-//            if(lista.get(i).getKlijent().getIme().equals(elementi[1]) && lista.get(i).getKlijent().getPrezime().equals(elementi[2])){
-//                racuni.add(lista.get(i));
-//            }
-//        }
-//        return racuni;
-//    }
-
+    public List<Racun> vratiVece(int broj,List<Racun> lista){
+        List<Racun> racuni=new ArrayList<Racun>();
+        if(!lista.isEmpty()){
+        for(int i=0;i<lista.size();i++){
+            if(getSuma(lista.get(i))>broj){
+                racuni.add(lista.get(i));
+            }
+        }}
+        return racuni;
+    }
+    public List<Racun> vratiManje(int broj,List<Racun> lista){
+        List<Racun> racuni=new ArrayList<Racun>();
+        if(!lista.isEmpty()){
+        for(int i=0;i<lista.size();i++){
+            if(getSuma(lista.get(i))<broj){
+                racuni.add(lista.get(i));
+            }
+        }
+        }
+        return racuni;
+    }
+    public List<Racun> vratiIste(int broj,List<Racun> lista){
+        List<Racun> racuni=new ArrayList<Racun>();
+        if(!lista.isEmpty()){
+        for(int i=0;i<lista.size();i++){
+            if(getSuma(lista.get(i))==broj){
+                racuni.add(lista.get(i));
+            }
+        }
+        }
+        return racuni;
+    }
+    public List<Racun> vratiKlijentRacun(Korisnik korisnik,List<Racun> lista){
+        System.out.println("Korisnik: "+korisnik.getIme());
+        List<Racun> racuni=new ArrayList<Racun>();
+        for(int i=0;i<lista.size();i++){
+            if(korisnik.getIdKorisnika().equals(lista.get(i).getKlijent().getIdKorisnika())){
+                racuni.add(lista.get(i));
+            }
+        }
+        return racuni;
+    }
+    public Racun odpremiRacun(Racun racun) {
+       try {
+            RequestObject request=new RequestObject();
+            request.setOperation(Operation.Operacija_Kreiraj_Racun);
+            request.setData(racun);
+            sendRequest(request);
+            ResponseObject response=receiveResponse();
+            if(response.getException()!=null){
+                throw response.getException();
+            }
+            return (Racun)response.getData();
+        } catch (IOException ex) {
+            Logger.getLogger(CommunicationController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CommunicationController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(CommunicationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
 
     

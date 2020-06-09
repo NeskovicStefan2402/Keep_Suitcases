@@ -79,7 +79,10 @@ public class ClientHandlerThread extends Thread {
                     case Operation.Operacija_Vrati_IzvestajRacuna:
                         response = vratiIstoriju(request);
                         break;
-                    
+                    case Operation.Operacija_Kreiraj_Racun:
+                        response = odpremiRacun(request);
+                        break;
+                   
                 }
                 sendResponse(response);
             } catch (Exception ex) {
@@ -299,6 +302,21 @@ public class ClientHandlerThread extends Thread {
             response = new ResponseObject();
             List<Racun> stanje= Controller.getInstance().vratiIstoriju();
             response.setData(stanje);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setException(ex);
+        }
+        return response;
+    }
+
+    private ResponseObject odpremiRacun(RequestObject request) {
+       ResponseObject response = null;
+        Racun racun=(Racun)request.getData();
+        
+        try {
+            response = new ResponseObject();
+            Racun r=Controller.getInstance().odpremiRacun(racun);
+            response.setData(r);
         } catch (Exception ex) {
             ex.printStackTrace();
             response.setException(ex);

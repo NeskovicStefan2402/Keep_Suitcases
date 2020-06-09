@@ -51,7 +51,7 @@ public class frmMenu extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabelPrezimeRadnika = new javax.swing.JLabel();
-        jLabelImeRadnika1 = new javax.swing.JLabel();
+        jLabelImeRadnika = new javax.swing.JLabel();
         jBtnStampajPrijemnicu = new javax.swing.JButton();
         jBtnStampajRacun = new javax.swing.JButton();
         jBtnPretraziPrtljag = new javax.swing.JButton();
@@ -62,6 +62,11 @@ public class frmMenu extends javax.swing.JFrame {
         jLblKolicina = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabelKorisnickoImeRadnika = new javax.swing.JLabel();
+        jLabelImeRadnika1 = new javax.swing.JLabel();
+        jLabelPrezimeRadnika1 = new javax.swing.JLabel();
+        jLabelKorisnickoImeRadnika1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar2 = new javax.swing.JMenuBar();
@@ -100,8 +105,8 @@ public class frmMenu extends javax.swing.JFrame {
         jLabelPrezimeRadnika.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
         jLabelPrezimeRadnika.setText("Prezime");
 
-        jLabelImeRadnika1.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
-        jLabelImeRadnika1.setText("Ime");
+        jLabelImeRadnika.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
+        jLabelImeRadnika.setText("Ime");
 
         jBtnStampajPrijemnicu.setFont(new java.awt.Font("DialogInput", 1, 14)); // NOI18N
         jBtnStampajPrijemnicu.setText("Ispisi prijemnice");
@@ -169,13 +174,28 @@ public class frmMenu extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblPrijemnice);
 
         jLblKolicina.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
-        jLblKolicina.setText("Kolicina:");
+        jLblKolicina.setText("Kolicina");
 
         jLabel6.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
         jLabel6.setText("Kolicina:");
 
         jLabel7.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
         jLabel7.setText("kom.");
+
+        jLabelKorisnickoImeRadnika.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
+        jLabelKorisnickoImeRadnika.setText("Korisnicko");
+
+        jLabelImeRadnika1.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
+        jLabelImeRadnika1.setText("Ime:");
+
+        jLabelPrezimeRadnika1.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
+        jLabelPrezimeRadnika1.setText("Prezime:");
+
+        jLabelKorisnickoImeRadnika1.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
+        jLabelKorisnickoImeRadnika1.setText("Korisnicko ime:");
+
+        jLabel5.setFont(new java.awt.Font("DialogInput", 1, 24)); // NOI18N
+        jLabel5.setText("Trenutno stanje na skladistu:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -184,30 +204,36 @@ public class frmMenu extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(57, 57, 57)
-                                .addComponent(jBtnDodajTransakciju4, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jBtnStampajPrijemnicu)
-                                .addGap(27, 27, 27))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(41, 41, 41)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(25, 25, 25)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabelPrezimeRadnika)
-                                            .addComponent(jLabelImeRadnika1))))
-                                .addGap(22, 22, 22)))
+                        .addGap(57, 57, 57)
+                        .addComponent(jBtnDodajTransakciju4, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                        .addComponent(jBtnStampajPrijemnicu)
+                        .addGap(27, 27, 27)
                         .addComponent(jBtnStampajRacun, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(146, 146, 146)
                         .addComponent(jBtnPretraziPrtljag, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(61, 61, 61)
-                        .addComponent(jBtnIzvestajOTransakcijama)))
+                        .addComponent(jBtnIzvestajOTransakcijama))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(15, 15, 15)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(158, 158, 158))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelKorisnickoImeRadnika1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabelPrezimeRadnika1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabelImeRadnika1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelKorisnickoImeRadnika, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabelPrezimeRadnika, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                                        .addComponent(jLabelImeRadnika, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -219,7 +245,10 @@ public class frmMenu extends javax.swing.JFrame {
                         .addComponent(jLblKolicina)
                         .addGap(30, 30, 30)
                         .addComponent(jLabel7)
-                        .addGap(7, 7, 7))))
+                        .addGap(7, 7, 7))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(158, 158, 158))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,15 +257,27 @@ public class frmMenu extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(29, 29, 29)
-                                .addComponent(jLabelImeRadnika1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabelPrezimeRadnika)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabelImeRadnika)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabelPrezimeRadnika)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabelKorisnickoImeRadnika))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabelImeRadnika1)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabelPrezimeRadnika1)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabelKorisnickoImeRadnika1))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1))))
                         .addGap(87, 87, 87)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jBtnStampajPrijemnicu, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -247,8 +288,8 @@ public class frmMenu extends javax.swing.JFrame {
                             .addComponent(jBtnPretraziPrtljag, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBtnIzvestajOTransakcijama, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLblKolicina)
@@ -300,40 +341,40 @@ public class frmMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnStampajPrijemnicuActionPerformed
 
     private void jBtnStampajRacunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnStampajRacunActionPerformed
-//        if(jTablePrijemnice.getSelectedRow()!=-1){    
-//            Prijemnica prijemnica=CommunicationController.getInstance().sveNepreuzetePrijemnice().get(jTablePrijemnice.getSelectedRow());
-//            if(!prijemnica.getPrtljag().isPreuzeto()){
-//                JDialog dialog=new JDialog();
-//                JPanel panel=new frmStampajPrijemnicu(prijemnica);
-//                dialog.add(panel);
-//                dialog.pack();
-//                dialog.setLocationByPlatform(true);
-//                dialog.setVisible(true);
-//            }else{
-//                uPozadini();
-//                JOptionPane.showMessageDialog(this, "Selektovani prtljag je vec preuzet!");
-//            }
-//        }else{
-//            JOptionPane.showMessageDialog(this, "Potrebno je da selektujete prijemnicu!");
-//        }
+        if(tblPrijemnice.getSelectedRow()!=-1){    
+            try {
+                Racun racun=CommunicationController.getInstance().vratiTrenutnoStanje().get(tblPrijemnice.getSelectedRow());
+                JDialog dialog=new JDialog();
+                JPanel panel=new frmStampajRacun(racun);
+                dialog.add(panel);
+                dialog.pack();
+                dialog.setLocationByPlatform(true);
+                dialog.setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(frmMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(this, "Potrebno je da selektujete racun!");
+        }
     }//GEN-LAST:event_jBtnStampajRacunActionPerformed
 
     private void jBtnPretraziPrtljagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnPretraziPrtljagActionPerformed
-//        JDialog dialog=new JDialog(this,"Pretraga prtljaga",true);
-//        JPanel panel=new frmPretraga();
-//        dialog.add(panel);
-//        dialog.pack();
-//        dialog.setLocationByPlatform(true);
-//        dialog.show();
+        JDialog dialog=new JDialog(this,"Pretraga prtljaga",true);
+        JPanel panel=new frmPretraga();
+        dialog.add(panel);
+        dialog.pack();
+        dialog.setLocationByPlatform(true);
+        dialog.show();
     }//GEN-LAST:event_jBtnPretraziPrtljagActionPerformed
 
     private void jBtnIzvestajOTransakcijamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnIzvestajOTransakcijamaActionPerformed
-//       JDialog dialog=new JDialog();
-//       JPanel panel=new frmIzvestajSvihTransakcija();
-//       dialog.add(panel);
-//       dialog.pack();
-//       dialog.setLocationByPlatform(true);
-//       dialog.setVisible(true);
+       JDialog dialog=new JDialog();
+       JPanel panel=new frmIzvestajSvihTransakcija();
+       dialog.add(panel);
+       dialog.pack();
+       dialog.setLocationByPlatform(true);
+       dialog.setVisible(true);
     }//GEN-LAST:event_jBtnIzvestajOTransakcijamaActionPerformed
 
     private void jBtnDodajTransakciju4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDodajTransakciju4ActionPerformed
@@ -341,6 +382,7 @@ public class frmMenu extends javax.swing.JFrame {
         transakcija.pack();
         transakcija.setLocationByPlatform(true);
         transakcija.setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_jBtnDodajTransakciju4ActionPerformed
 
     private void jMenuItemOdjavaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOdjavaActionPerformed
@@ -422,10 +464,15 @@ public class frmMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabelImeRadnika;
     private javax.swing.JLabel jLabelImeRadnika1;
+    private javax.swing.JLabel jLabelKorisnickoImeRadnika;
+    private javax.swing.JLabel jLabelKorisnickoImeRadnika1;
     private javax.swing.JLabel jLabelPrezimeRadnika;
+    private javax.swing.JLabel jLabelPrezimeRadnika1;
     private javax.swing.JLabel jLblKolicina;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar2;
@@ -436,8 +483,9 @@ public class frmMenu extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     public void uPozadini(){
         try {
-            jLabelImeRadnika1.setText(radnik.getIme());
+            jLabelImeRadnika.setText(radnik.getIme());
             jLabelPrezimeRadnika.setText(radnik.getPrezime());
+            jLabelKorisnickoImeRadnika.setText(radnik.getKorisnickoIme());
             ArrayList<Racun> stanje=(ArrayList<Racun>) CommunicationController.getInstance().vratiTrenutnoStanje();
             TableModel model=new TableModelPrijemnica(stanje);
             tblPrijemnice.setModel(model);

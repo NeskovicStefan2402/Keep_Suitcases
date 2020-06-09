@@ -11,27 +11,29 @@ import controller.CommunicationController;
 import domain.Prijemnica;
 import domain.Racun;
 import domain.TipPrtljaga;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Stefan
  */
 public class TableModelIzvestaj extends AbstractTableModel{
-    Izvestaj izvestaj;
-    String[] kolone=new String[]{"Ime klijenta","Prezime klijenta","Radnik","Tip prtljaga","Tezina","Datum izdavanja","Cena"};
+    List<Racun> racuni;
+    String[] kolone=new String[]{"Ime korisnika","Prezime korisnika","Radnik","Cena","Tezina","Datum predavanja","Datum preuzimanja"};
     public TableModelIzvestaj(List<Racun> racuni) {
-        izvestaj=new Izvestaj();
-        izvestaj.setRacuni(racuni);
-        
+        this.racuni=racuni;
     }
     
     @Override
     public int getRowCount() {
-        return izvestaj.getRacuni().size();
+        
+        return racuni.size();
     }
 
     @Override
@@ -48,51 +50,29 @@ public class TableModelIzvestaj extends AbstractTableModel{
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch(columnIndex){
             case 0:
-                return izvestaj.getRacuni().get(rowIndex).getKlijent().getIme();
+                return racuni.get(rowIndex).getKlijent().getIme();
             case 1:
-                return izvestaj.getRacuni().get(rowIndex).getKlijent().getPrezime();
+                return racuni.get(rowIndex).getKlijent().getPrezime();
             case 2:
-                return izvestaj.getRacuni().get(rowIndex).getRadnik().getKorisnickoIme();
+                return racuni.get(rowIndex).getRadnik().getKorisnickoIme();
             case 3:
-                return izvestaj.getRacuni().get(rowIndex).getPrtljag().getNaziv();
+                return racuni.get(rowIndex).getCena();
             case 4:
-                return izvestaj.getRacuni().get(rowIndex).getPrtljag().getTezina();
+        {
+            try {
+                return CommunicationController.getInstance().getSuma(racuni.get(rowIndex));
+            } catch (IOException ex) {
+                Logger.getLogger(TableModelIzvestaj.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
             case 5:
-                return izvestaj.getRacuni().get(rowIndex).getDatum();
+                return racuni.get(rowIndex).getPredatoVreme();
             case 6:
-                return izvestaj.getRacuni().get(rowIndex).getCena();
+                return racuni.get(rowIndex).getPreuzetoVreme();
             default:
                 return null;
         }
     }
     
-    @Override
-    public void setValueAt(Object object,int rowIndex, int columnIndex) {
-        switch(columnIndex){
-            case 0:
-                izvestaj.getRacuni().get(rowIndex).getKlijent().setIme(object.toString());
-                break;
-            case 1:
-                izvestaj.getRacuni().get(rowIndex).getKlijent().setPrezime(object.toString());
-                break;
-            case 2:
-                izvestaj.getRacuni().get(rowIndex).getRadnik().setKorisnickoIme(object.toString());
-                break;
-            case 3:
-                izvestaj.getRacuni().get(rowIndex).getPrtljag().setNaziv((TipPrtljaga)object);
-                break;
-            case 4:
-                izvestaj.getRacuni().get(rowIndex).getPrtljag().setTezina(Double.parseDouble(object.toString()));
-                break;
-            case 5:
-                izvestaj.getRacuni().get(rowIndex).setDatum(new Date(object.toString()));
-                break;
-            case 6:
-                izvestaj.getRacuni().get(rowIndex).setCena(new BigDecimal(object.toString()));
-                break;
-            default:
-                break;
-        }
-    }
     
 }

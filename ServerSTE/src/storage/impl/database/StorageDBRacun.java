@@ -38,7 +38,7 @@ public class StorageDBRacun implements storage.storageRacun{
     
     @Override
     public List<Racun> getAll() throws Exception {
-        String upit="SELECT id,idRadnika,idKlijenta,predatoVreme,preuzetoVreme FROM racun";
+        String upit="SELECT id,idRadnika,idKlijenta,predatoVreme,preuzetoVreme,cena FROM racun";
         List<Racun> racuni=new ArrayList<>();
         try {
             Statement statement=DBConnection.getInstance().getConnection().createStatement();
@@ -49,8 +49,11 @@ public class StorageDBRacun implements storage.storageRacun{
                 racun.setIdRacuna(rs.getLong("id"));
                 racun.setKlijent(serviceKorisnik.getKorisnik(rs.getLong("idKlijenta")));
                 racun.setRadnik(serviceRadnik.getRadnika(rs.getLong("idRadnika")));
-                racun.setPredatoVreme(rs.getDate("predatoVreme"));
-                racun.setPreuzetoVreme(rs.getDate("preuzetoVreme"));
+                racun.setPredatoVreme(rs.getTimestamp("predatoVreme").toLocalDateTime());
+                racun.setCena(rs.getFloat("cena"));
+                if(rs.getTimestamp("preuzetoVreme")!=null){
+                    racun.setPreuzetoVreme(rs.getTimestamp("preuzetoVreme").toLocalDateTime());
+                }
                 List<StavkaRacuna> stavke=new ArrayList<>();
                 stavke=storageDBStavkaRacuna.getAll(rs.getLong("id"));
                 racun.setStavke(stavke);
@@ -107,10 +110,11 @@ public class StorageDBRacun implements storage.storageRacun{
     public Racun update(Racun racun) throws Exception {
         java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
         try {
-            String upit="UPDATE Racun SET preuzetoVreme=? WHERE id=?";
+            String upit="UPDATE Racun SET preuzetoVreme=?,cena=? WHERE id=?";
             PreparedStatement statement=DBConnection.getInstance().getConnection().prepareStatement(upit);
             statement.setTimestamp(1, date);
-            statement.setLong(2, racun.getIdRacuna());
+            statement.setFloat(2, racun.getCena());
+            statement.setLong(3, racun.getIdRacuna());
             statement.executeUpdate();
             
             statement.close();
