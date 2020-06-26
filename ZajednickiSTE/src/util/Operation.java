@@ -13,22 +13,19 @@ import java.io.Serializable;
  */
 public class Operation implements Serializable{
     public static final int Operacija_Kreiraj_Radnika=1;
-    public static final int Operacija_Zapamti_Radnika=2;
-    public static final int Operacija_Kreiraj_Korisnika=3;
-    public static final int Operacija_Zapamti_Korisnika=4;
-    public static final int Operacija_Prijava_Radnika=5;
-    public static final int Operacija_Kreiraj_Prtljag=6;
-    public static final int Operacija_Zapamti_Prtljag=7;
-    public static final int Operacija_Kreiraj_Prijemnicu=8;
-    public static final int Operacija_Zapamti_Prijemnicu=9;
-    public static final int Operacija_Vrati_Prijemnicu=10;
-    public static final int Operacija_Kreiraj_Racun=11;
-    public static final int Operacija_Zapamti_Racun=12;
-    public static final int Operacija_Vrati_TrenutnoStanje=13;
-    public static final int Operacija_Vrati_IzvestajRacuna=14;
-    public static final int Operacija_Vrati_RacuneZaKorisnikeICene=15;
-    public static final int Operacija_Vrati_Listu_Korisnika=16;
-    public static final int Operacija_Vrati_Tipove_Prtljaga=17;
-    public static final int Operacija_Vrati_Listu_Prtljaga=18;
+    public static final int Operacija_Kreiraj_Korisnika=2;
+    public static final int Operacija_Prijava_Radnika=3;
+    public static final int Operacija_Kreiraj_Prtljag=4;
+    public static final int Operacija_Kreiraj_Prijemnicu=5;
+    public static final int Operacija_Vrati_Prijemnicu=6;
+    public static final int Operacija_Kreiraj_Racun=7;
+    public static final int Operacija_Vrati_TrenutnoStanje=8;
+    public static final int Operacija_Vrati_IzvestajRacuna=9;
+    public static final int Operacija_Vrati_RacuneZaKorisnikeICene=10;
+    public static final int Operacija_Vrati_Listu_Korisnika=11;
+    public static final int Operacija_Vrati_Tipove_Prtljaga=12;
+    public static final int Operacija_Vrati_Listu_Prtljaga=13;
+    public static final int Operacija_Obrisi_Prijemnicu=14;
+    public static final int Operacija_Stampaj_Izvestaj=15;
     //todo sve operacije!
 }

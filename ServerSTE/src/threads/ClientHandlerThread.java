@@ -7,15 +7,10 @@ package threads;
 
 import controller.Controller;
 import domain.Korisnik;
-import domain.Prijemnica;
 import domain.Prtljag;
 import domain.Racun;
 import domain.Radnik;
 import domain.TipPrtljaga;
-//import domain.Invoice;
-//import domain.Manufacturer;
-//import domain.Product;
-//import domain.User;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -82,7 +77,12 @@ public class ClientHandlerThread extends Thread {
                     case Operation.Operacija_Kreiraj_Racun:
                         response = odpremiRacun(request);
                         break;
-                   
+                    case Operation.Operacija_Obrisi_Prijemnicu:
+                        response = obrisiPrijemnicu(request);
+                        break;
+                    case Operation.Operacija_Stampaj_Izvestaj:
+                        response = stampajIzvestaj(request);
+                        break;
                 }
                 sendResponse(response);
             } catch (Exception ex) {
@@ -187,68 +187,6 @@ public class ClientHandlerThread extends Thread {
         }
         return response;
     }
-//    public ResponseObject operationLogIn(RequestObject request) {
-//        ResponseObject response = null;
-//        Map<String, String> data = (Map) request.getData();
-//        String username = data.get("username");
-//        String password = data.get("password");
-//
-//        try {
-//            response = new ResponseObject();
-//            User user = Controller.getInstance().logIn(username, password);
-//            response.setData(user);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            response.setException(ex);
-//        }
-//        return response;
-//    }
-
-//    private ResponseObject operationGetAllManufacturers(RequestObject request) {
-//        ResponseObject response = null;
-//        
-//        try {
-//            response = new ResponseObject();
-//            List<Manufacturer> manufacturers= Controller.getInstance().getAllManufacturers();
-//            response.setData(manufacturers);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            response.setException(ex);
-//        }
-//        return response;
-//    }
-//
-    
-//
-//    private ResponseObject operationGetAllProducts(RequestObject request) {
-//        ResponseObject response = null;
-//        
-//        try {
-//            response = new ResponseObject();
-//            List<Product> products= Controller.getInstance().getAllProducts();
-//            response.setData(products);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            response.setException(ex);
-//        }
-//        return response;
-//    }
-//
-//    private ResponseObject operationSaveInvoice(RequestObject request) {
-//         ResponseObject response = null;
-//         Invoice invoice=(Invoice)request.getData();
-//        
-//        try {
-//            response = new ResponseObject();
-//            invoice= Controller.getInstance().saveInvoice(invoice);
-//            response.setData(invoice);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            response.setException(ex);
-//        }
-//        return response;
-//    }
-
     public Socket getSocket() {
         return socket;
     }
@@ -317,6 +255,36 @@ public class ClientHandlerThread extends Thread {
             response = new ResponseObject();
             Racun r=Controller.getInstance().odpremiRacun(racun);
             response.setData(r);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setException(ex);
+        }
+        return response;
+    }
+
+    private ResponseObject obrisiPrijemnicu(RequestObject request) {
+        ResponseObject response = null;
+        Racun racun=(Racun)request.getData();
+        
+        try {
+            response = new ResponseObject();
+            Racun r=Controller.getInstance().obrisiPrijemnicu(racun);
+            response.setData(r);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.setException(ex);
+        }
+        return response;
+    }
+
+    private ResponseObject stampajIzvestaj(RequestObject request) {
+        ResponseObject response = null;
+        List<Racun> racuni=(List<Racun>) request.getData();
+        
+        try {
+            response = new ResponseObject();
+            String resp=Controller.getInstance().stampajIzvestaj(racuni);
+            response.setData(resp);
         } catch (Exception ex) {
             ex.printStackTrace();
             response.setException(ex);

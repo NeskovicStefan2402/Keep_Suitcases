@@ -13,6 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import transfer.ResponseObject;
 
 /**
  *
@@ -25,7 +26,7 @@ public class frmLogin extends javax.swing.JFrame {
      */
     public frmLogin() {
         initComponents();
-        
+        setTitle("Dobrodosli na KEEPSUITCASE! ");
     }
 
     /**
@@ -200,14 +201,15 @@ public class frmLogin extends javax.swing.JFrame {
         String username=jTxtUsername.getText().trim();
         String password=jPasswordField1.getText();
         try {
-            Radnik radnik=CommunicationController.getInstance().prijaviRadnika(username, password);
+            ResponseObject response= CommunicationController.getInstance().prijaviRadnika(username, password);
+            Radnik radnik =(Radnik) response.getData();
+            JOptionPane.showMessageDialog(this, "Uspesan pristup.");
             this.dispose();
-            //JFrame forma=new FrmMain(controller);
             JFrame forma=new frmMenu(radnik);
             forma.setTitle("Informacioni sistem KEEPSUITCASE");
             forma.setVisible(true);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Greška prilikom prijavljivanja radnika!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Onemogucen pristup : \n"+ex.getMessage(), "Greška prilikom prijavljivanja radnika!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jBtnPrijaviSeActionPerformed
 

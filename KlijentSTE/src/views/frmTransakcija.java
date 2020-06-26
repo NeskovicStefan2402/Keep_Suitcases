@@ -12,8 +12,6 @@ import controller.CommunicationController;
 import domain.Korisnik;
 import domain.Prtljag;
 import domain.TipPrtljaga;
-
-import domain.Prijemnica;
 import domain.Racun;
 import domain.Radnik;
 import domain.StavkaRacuna;
@@ -25,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.TableModel;
+import other.OtherMethods;
 
 /**
  *
@@ -453,51 +452,47 @@ public class frmTransakcija extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnDodajKlijentaActionPerformed
 
     private void jBtnKreirajTransakcijuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnKreirajTransakcijuActionPerformed
-        try {
-            Racun racun =CommunicationController.getInstance().getRacun();
-            if(racun.getKlijent()!=null){
-                CommunicationController.getInstance().getRacun().setRadnik(radnik);
-                CommunicationController.getInstance().kreirajRacun();
-                refreshFunkcija();
-                setVisible(false);
-                JFrame menu =new frmMenu(radnik);
-                menu.pack();
-                menu.setLocationByPlatform(true);
-                menu.setVisible(true);
-            }else{
-                JOptionPane.showMessageDialog(this, "Niste uneli korisnika!");
+        Racun racun =OtherMethods.getInstance().getRacun();
+        if(racun.getKlijent()!=null){
+            OtherMethods.getInstance().getRacun().setRadnik(radnik);
+            try{
+                Racun racunRez=CommunicationController.getInstance().kreirajRacun(OtherMethods.getInstance().getRacun());
+                JOptionPane.showMessageDialog(this, "Sistem je uspeno kreirao racun! \n"
+                        + "Racun : "+racunRez.getKlijent().getIme()+" "+racunRez.getKlijent().getPrezime()+" - "+racunRez.getIdRacuna());
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Sistem ne moze da kreira racun! \n"+e.getStackTrace());
             }
-        } catch (IOException ex) {
-            Logger.getLogger(frmTransakcija.class.getName()).log(Level.SEVERE, null, ex);
+            refreshFunkcija();
+            setVisible(false);
+            JFrame menu =new frmMenu(radnik);
+            menu.pack();
+            menu.setLocationByPlatform(true);
+            menu.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(this, "Niste uneli korisnika!");
         }
     }//GEN-LAST:event_jBtnKreirajTransakcijuActionPerformed
 
     private void jBtnDodajPrljagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDodajPrljagActionPerformed
         if(!jTxtTezina.getText().isEmpty()){
-                    try {
-                        if(CommunicationController.getInstance().daLiJeBroj(jTxtTezina.getText())){
-                            try {
-                                Prtljag prtljag=new Prtljag();
-                                prtljag.setTip((TipPrtljaga) jComboBoxTipoviPrtljaga.getSelectedItem());
-                                prtljag.setTezina(Double.parseDouble(jTxtTezina.getText()));
-                                prtljag.setLomljivost(jCheckBox1.isSelected());
-                                prtljag.setRadnik(radnik);
-                                Prtljag prt=CommunicationController.getInstance().kreirajPrtljag(prtljag);
-                                JOptionPane.showMessageDialog(this, "Uspesno je kreiran prtljag! ");
-//                                jTxtTezina.setEditable(false);
-//                                jComboBoxTipoviPrtljaga.setEnabled(false);
-//                                jCheckBox1.setEnabled(false);
-//                                jBtnDodajPrljag.setVisible(false);
-                                refreshFunkcija();
-                            } catch (IOException ex) {
-                                Logger.getLogger(frmTransakcija.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }else{
-                            JOptionPane.showMessageDialog(this, "Niste uneli broj u polje tezina!");
-                        }
-                    } catch (IOException ex) {
-                        Logger.getLogger(frmTransakcija.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+            if(OtherMethods.getInstance().daLiJeBroj(jTxtTezina.getText())){
+                try {
+                    Prtljag prtljag=new Prtljag();
+                    prtljag.setTip((TipPrtljaga) jComboBoxTipoviPrtljaga.getSelectedItem());
+                    prtljag.setTezina(Double.parseDouble(jTxtTezina.getText()));
+                    prtljag.setLomljivost(jCheckBox1.isSelected());
+                    prtljag.setRadnik(radnik);
+                    Prtljag prt=CommunicationController.getInstance().kreirajPrtljag(prtljag);
+                    JOptionPane.showMessageDialog(this, "Sistem je uspeno kreirao prtljag! \n"
+                            + "Prtljag : "+prt.getTip().getNaziv()+" / "+prt.getTezina()+" kg");
+                    refreshFunkcija();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Sistem ne moze da kreira prtljag! \n"
+                            +e.getStackTrace());
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Niste uneli broj u polje tezina!");
+            }
                     }else{
                       JOptionPane.showMessageDialog(this, "Popunite prazna polja!");
                   }
@@ -510,13 +505,9 @@ public class frmTransakcija extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(tblRacun.getSelectedRow()!=-1){
-            try {
-                StavkaRacuna stavka = CommunicationController.getInstance().getRacun().getStavke().get(tblRacun.getSelectedRow());
-                CommunicationController.getInstance().ukloniStavkuRacunu(stavka);
-                refreshFunkcija();
-            } catch (IOException ex) {
-                Logger.getLogger(frmTransakcija.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            StavkaRacuna stavka = OtherMethods.getInstance().getRacun().getStavke().get(tblRacun.getSelectedRow());
+            OtherMethods.getInstance().ukloniStavkuRacunu(stavka);
+            refreshFunkcija();
         }else{
             JOptionPane.showMessageDialog(this, "Prvo selektujte prtljag iz tabele!");
         }
@@ -526,15 +517,15 @@ public class frmTransakcija extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if(tblPrtljazi.getSelectedRow()!=-1){
             try {
-                if(CommunicationController.getInstance().getRacun().getKlijent()==null){
+                if(OtherMethods.getInstance().getRacun().getKlijent()==null){
                     JOptionPane.showMessageDialog(this, "Prvo selektujte korisnika iz tabele!");
                 }else{
                     Prtljag prtljag=CommunicationController.getInstance().getPrtljag(tblPrtljazi.getSelectedRow(),radnik);
                     StavkaRacuna stavka =new StavkaRacuna();
                     stavka.setCena(prtljag.getTip().getCena());
-                    stavka.setId(new Long(CommunicationController.getInstance().getRacun().getStavke().size()));
+                    stavka.setId(new Long(OtherMethods.getInstance().getRacun().getStavke().size()));
                     stavka.setPrtljag(prtljag);
-                    CommunicationController.getInstance().dodajStavkuRacunu(stavka);
+                    OtherMethods.getInstance().dodajStavkuRacunu(stavka);
                     refreshFunkcija();
                 }
             } catch (IOException ex) {
@@ -549,8 +540,8 @@ public class frmTransakcija extends javax.swing.JFrame {
         if(tblKlijenti.getSelectedRow()!=-1){
             try {
                 Korisnik korisnik=CommunicationController.getInstance().getKorisnik(tblKlijenti.getSelectedRow());
-                CommunicationController.getInstance().getRacun().setKlijent(korisnik);
-                CommunicationController.getInstance().getRacun().setStavke(new ArrayList<>());
+                OtherMethods.getInstance().getRacun().setKlijent(korisnik);
+                OtherMethods.getInstance().getRacun().setStavke(new ArrayList<>());
                 refreshFunkcija();
                 refreshFunkcija();
             } catch (IOException ex) {
@@ -633,6 +624,7 @@ public class frmTransakcija extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 public void uPozadini(){
     popuniComboBox();
+    setTitle("Prozor za kreiranje prijemnice za klijenta");
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     refreshFunkcija();
     
@@ -645,14 +637,14 @@ public void refreshFunkcija(){
             TableModel model1=new TableModelPrtljazi(CommunicationController.getInstance().vratiSvePrtljage(radnik));
             tblPrtljazi.setModel(model1);
             
-            TableModel model2=new TableModelStavkeRacuna(CommunicationController.getInstance().getRacun().getStavke());
+            TableModel model2=new TableModelStavkeRacuna(OtherMethods.getInstance().getRacun().getStavke());
             tblRacun.setModel(model2);
             
-            if(CommunicationController.getInstance().getRacun().getKlijent()!=null){
-                txtKorisnikRacun.setText(CommunicationController.getInstance().getRacun().getKlijent().getIme()+" "+CommunicationController.getInstance().getRacun().getKlijent().getPrezime());
-                txtKontaktRacun.setText(CommunicationController.getInstance().getRacun().getKlijent().getKontaktBroj());
-                txtJMBGRacun.setText(CommunicationController.getInstance().getRacun().getKlijent().getJMBG());
-                txtSumaRacun.setText(CommunicationController.getInstance().getSuma(CommunicationController.getInstance().getRacun())+"kg");
+            if(OtherMethods.getInstance().getRacun().getKlijent()!=null){
+                txtKorisnikRacun.setText(OtherMethods.getInstance().getRacun().getKlijent().getIme()+" "+OtherMethods.getInstance().getRacun().getKlijent().getPrezime());
+                txtKontaktRacun.setText(OtherMethods.getInstance().getRacun().getKlijent().getKontaktBroj());
+                txtJMBGRacun.setText(OtherMethods.getInstance().getRacun().getKlijent().getJMBG());
+                txtSumaRacun.setText(OtherMethods.getInstance().getSuma(OtherMethods.getInstance().getRacun())+"kg");
             }
         } catch (IOException ex) {
             Logger.getLogger(frmTransakcija.class.getName()).log(Level.SEVERE, null, ex);

@@ -20,7 +20,7 @@ public class ResponseObject implements Serializable{
 
     public ResponseObject(Object data, Exception exception) {
         this.data = data;
-        this.exception = exception;
+        this.exception=exception;
     }
 
     public Exception getException() {
@@ -30,7 +30,7 @@ public class ResponseObject implements Serializable{
     public void setException(Exception exception) {
         this.exception = exception;
     }
-
+    
     public Object getData() {
         return data;
     }

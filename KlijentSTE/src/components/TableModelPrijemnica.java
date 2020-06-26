@@ -5,7 +5,6 @@
  */
 package components;
 
-import domain.Prijemnica;
 import domain.Racun;
 import domain.StavkaRacuna;
 import domain.TipPrtljaga;

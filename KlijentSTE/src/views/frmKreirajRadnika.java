@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import other.OtherMethods;
 
 /**
  *
@@ -215,7 +216,7 @@ public class frmKreirajRadnika extends javax.swing.JPanel {
     private void jBtnKreirajNalogRadnikaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnKreirajNalogRadnikaActionPerformed
         if(!txtIme.getText().isEmpty() && !txtPrezime.getText().isEmpty() && !txtKorisnicko.getText().isEmpty() && !txtJMBG.getText().isEmpty()){
             try {
-                if(CommunicationController.getInstance().proveriFormat(txtKorisnicko.getText()) && CommunicationController.getInstance().proveriFormatJMBG(txtJMBG.getText())){
+                if(OtherMethods.getInstance().proveriFormat(txtKorisnicko.getText()) && OtherMethods.getInstance().proveriFormatJMBG(txtJMBG.getText())){
                     if(txtSifra.getText().equals(txtPotvrda.getText())){
                     Radnik radnik=new Radnik();
                     radnik.setKorisnickoIme(txtKorisnicko.getText());
@@ -224,22 +225,20 @@ public class frmKreirajRadnika extends javax.swing.JPanel {
                     radnik.setJMBG(txtJMBG.getText());
                     radnik.setSifra(txtSifra.getText());
                         try{
-                            CommunicationController.getInstance().kreirajRadnika(radnik);
-                            JOptionPane.showMessageDialog(this, "Uspesno ste kreirali radnika!");
+                            Radnik radnikRez=CommunicationController.getInstance().kreirajRadnika(radnik);
+                            JOptionPane.showMessageDialog(this, "Sistem je kreirao nalog radnika.\n Radnik : "+radnikRez.getKorisnickoIme());
                         }catch(Exception e){
-                            JOptionPane.showMessageDialog(this, e.getStackTrace());
+                            JOptionPane.showMessageDialog(this, "Sistem ne moze da kreira nalog radnika."+e.getStackTrace());
                         }
                     }else{
                         txtSifra.setText("");
                         txtPotvrda.setText("");
-                        JOptionPane.showMessageDialog(this,"Niste adelvatno potvrdili sifru. Uradite to opet!");
+                        JOptionPane.showMessageDialog(this,"Niste adekvatno potvrdili sifru. Uradite to opet!");
                     }
                 }else{
                     System.out.println("Korisnicko: "+txtKorisnicko.getText().toString());
                     JOptionPane.showMessageDialog(this,"Proverite strukturu unetih podataka!");
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(frmKreirajRadnika.class.getName()).log(Level.SEVERE, null, ex);
             }catch (Exception ex) {
                 Logger.getLogger(frmKreirajRadnika.class.getName()).log(Level.SEVERE, null, ex);
             }

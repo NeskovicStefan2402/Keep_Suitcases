@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import other.OtherMethods;
 /**
  *
  * @author Stefan
@@ -203,48 +204,47 @@ public class frmPretraga extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         List<Racun> racuni1=new ArrayList<>();
         if(!jComboBoxKlijenti.getSelectedItem().toString().equals("Nista")){
-            try {
-                racuni1=CommunicationController.getInstance().vratiKlijentRacun((Korisnik) jComboBoxKlijenti.getSelectedItem(),racuni);
-                if(jTxtTezina.getText().isEmpty()){
-                    JOptionPane.showMessageDialog(this, "Popunite polje tezina!");
-                }else if(CommunicationController.getInstance().daLiJeBroj(jTxtTezina.getText())){
-                    if(jComboBoxUslov.getSelectedItem().toString().equals(">"))
-                        racuni1=CommunicationController.getInstance().vratiVece(Integer.parseInt(jTxtTezina.getText()),racuni1);
-                    else if(jComboBoxUslov.getSelectedItem().toString().equals("<"))
-                        racuni1=CommunicationController.getInstance().vratiManje(Integer.parseInt(jTxtTezina.getText()),racuni1);
-                    else if(jComboBoxUslov.getSelectedItem().toString().equals("="))
-                        racuni1=CommunicationController.getInstance().vratiIste(Integer.parseInt(jTxtTezina.getText()),racuni1);
+            racuni1=OtherMethods.getInstance().vratiKlijentRacun((Korisnik) jComboBoxKlijenti.getSelectedItem(),racuni);
+            if(jTxtTezina.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Popunite polje tezina!");
+            }else if(OtherMethods.getInstance().daLiJeBroj(jTxtTezina.getText())){
+                if(jComboBoxUslov.getSelectedItem().toString().equals(">"))
+                    racuni1=OtherMethods.getInstance().vratiVece(Integer.parseInt(jTxtTezina.getText()),racuni1);
+                else if(jComboBoxUslov.getSelectedItem().toString().equals("<"))
+                    racuni1=OtherMethods.getInstance().vratiManje(Integer.parseInt(jTxtTezina.getText()),racuni1);
+                else if(jComboBoxUslov.getSelectedItem().toString().equals("="))
+                    racuni1=OtherMethods.getInstance().vratiIste(Integer.parseInt(jTxtTezina.getText()),racuni1);
+                if(racuni1.size()==0){
+                    JOptionPane.showMessageDialog(this, "Sistem ne moze da nadje transakcije po zadatim vrednostima!");
                 }else{
-                    JOptionPane.showMessageDialog(this, "Popunite polje tezina validnim vrednostima!");
+                    JOptionPane.showMessageDialog(this, "Sistem je nasao transakcije po zadatim vrednostima!");
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(frmPretraga.class.getName()).log(Level.SEVERE, null, ex);
+            }else{
+                JOptionPane.showMessageDialog(this, "Popunite polje tezina validnim vrednostima!");
             }
         }else{
             if(jTxtTezina.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this, "Popunite polje tezina!");
-            }else try {
+            }else{
                         
-                if(CommunicationController.getInstance().daLiJeBroj(jTxtTezina.getText())){
+                if(OtherMethods.getInstance().daLiJeBroj(jTxtTezina.getText())){
                     if(jComboBoxUslov.getSelectedItem().toString().equals(">"))
-                            racuni1=CommunicationController.getInstance().vratiVece(Integer.parseInt(jTxtTezina.getText()),racuni);
+                            racuni1=OtherMethods.getInstance().vratiVece(Integer.parseInt(jTxtTezina.getText()),racuni);
                     else if(jComboBoxUslov.getSelectedItem().toString().equals("<"))
-                           racuni1=CommunicationController.getInstance().vratiManje(Integer.parseInt(jTxtTezina.getText()),racuni);
+                           racuni1=OtherMethods.getInstance().vratiManje(Integer.parseInt(jTxtTezina.getText()),racuni);
                     else if(jComboBoxUslov.getSelectedItem().toString().equals("="))
-                            racuni1=CommunicationController.getInstance().vratiIste(Integer.parseInt(jTxtTezina.getText()),racuni);
+                            racuni1=OtherMethods.getInstance().vratiIste(Integer.parseInt(jTxtTezina.getText()),racuni);
                     
                 }else{
                     JOptionPane.showMessageDialog(this, "Popunite polje tezina validnim vrednostima!");
                 }
                 
-            } catch (IOException ex) {
-                Logger.getLogger(frmPretraga.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
   
         }
-        uPozadini(racuni1);
     }//GEN-LAST:event_jButton1ActionPerformed
-
+        uPozadini(racuni1);
+    }
     private void jComboBoxKlijentiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxKlijentiActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBoxKlijentiActionPerformed

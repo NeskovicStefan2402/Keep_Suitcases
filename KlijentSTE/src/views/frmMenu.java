@@ -9,7 +9,6 @@ import views.frmLogin;
 import components.TableModelKlijenti;
 import components.TableModelPrijemnica;
 import controller.CommunicationController;
-import domain.Prijemnica;
 import domain.Racun;
 import domain.Radnik;
 import java.io.IOException;
@@ -67,6 +66,7 @@ public class frmMenu extends javax.swing.JFrame {
         jLabelPrezimeRadnika1 = new javax.swing.JLabel();
         jLabelKorisnickoImeRadnika1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jBtnObrisiPrijemnicu = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar2 = new javax.swing.JMenuBar();
@@ -197,6 +197,14 @@ public class frmMenu extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("DialogInput", 1, 24)); // NOI18N
         jLabel5.setText("Trenutno stanje na skladistu:");
 
+        jBtnObrisiPrijemnicu.setFont(new java.awt.Font("DialogInput", 1, 14)); // NOI18N
+        jBtnObrisiPrijemnicu.setText("Obrisi prljag");
+        jBtnObrisiPrijemnicu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnObrisiPrijemnicuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -206,14 +214,16 @@ public class frmMenu extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(57, 57, 57)
                         .addComponent(jBtnDodajTransakciju4, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jBtnStampajPrijemnicu)
                         .addGap(27, 27, 27)
                         .addComponent(jBtnStampajRacun, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(146, 146, 146)
+                        .addGap(50, 50, 50)
+                        .addComponent(jBtnObrisiPrijemnicu, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jBtnPretraziPrtljag, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(61, 61, 61)
+                        .addGap(18, 18, 18)
                         .addComponent(jBtnIzvestajOTransakcijama))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -234,7 +244,7 @@ public class frmMenu extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jLabelPrezimeRadnika, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                                         .addComponent(jLabelImeRadnika, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -286,7 +296,8 @@ public class frmMenu extends javax.swing.JFrame {
                         .addGap(80, 80, 80)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jBtnPretraziPrtljag, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBtnIzvestajOTransakcijama, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jBtnIzvestajOTransakcijama, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBtnObrisiPrijemnicu, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(52, 52, 52)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -419,6 +430,27 @@ public class frmMenu extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jPanel1MouseClicked
 
+    private void jBtnObrisiPrijemnicuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnObrisiPrijemnicuActionPerformed
+        if(tblPrijemnice.getSelectedRow()!=-1){    
+            try {    
+                Racun racun=CommunicationController.getInstance().vratiTrenutnoStanje().get(tblPrijemnice.getSelectedRow());
+                Racun racunRez=CommunicationController.getInstance().obrisiPrijemnicu(racun);
+                try {
+                    JOptionPane.showMessageDialog(this, "Sistem je obrisao prijemnicu. \n Prijemnica : "+racunRez.getIdRacuna());
+                    uPozadini();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Sistem ne moze da obrise prijemnicu. \n Prijemnica : "+racunRez.getIdRacuna());
+                }
+                
+            } catch (IOException ex) {
+                Logger.getLogger(frmMenu.class.getName()).log(Level.SEVERE, null,ex);
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(this, "Potrebno je da selektujete racun!");
+        }
+    }//GEN-LAST:event_jBtnObrisiPrijemnicuActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -457,6 +489,7 @@ public class frmMenu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnDodajTransakciju4;
     private javax.swing.JButton jBtnIzvestajOTransakcijama;
+    private javax.swing.JButton jBtnObrisiPrijemnicu;
     private javax.swing.JButton jBtnPretraziPrtljag;
     private javax.swing.JButton jBtnStampajPrijemnicu;
     private javax.swing.JButton jBtnStampajRacun;

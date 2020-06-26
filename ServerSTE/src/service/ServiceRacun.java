@@ -51,5 +51,14 @@ public class ServiceRacun {
         }
         return null;
     }
+
+    public Racun obrisiPrijemnicu(Racun racun) {
+        try {
+            return storageDBRacun.delete(racun);
+        } catch (Exception ex) {
+            Logger.getLogger(ServiceRacun.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
 }

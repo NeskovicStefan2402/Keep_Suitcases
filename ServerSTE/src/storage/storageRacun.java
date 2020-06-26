@@ -5,7 +5,6 @@
  */
 package storage;
 
-import domain.Prijemnica;
 import domain.Racun;
 import java.util.List;
 
@@ -17,4 +16,5 @@ public interface storageRacun {
     public List<Racun> getAll() throws Exception;
     public Racun insert(Racun racun) throws Exception;
     public Racun update(Racun racun) throws Exception;
+    public Racun delete(Racun racun) throws Exception;
 }

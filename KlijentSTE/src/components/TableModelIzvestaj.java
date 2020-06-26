@@ -5,10 +5,8 @@
  */
 package components;
 
-import domain.Izvestaj;
 import javax.swing.table.AbstractTableModel;
 import controller.CommunicationController;
-import domain.Prijemnica;
 import domain.Racun;
 import domain.TipPrtljaga;
 import java.io.IOException;
@@ -18,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import other.OtherMethods;
 
 /**
  *
@@ -58,13 +57,7 @@ public class TableModelIzvestaj extends AbstractTableModel{
             case 3:
                 return racuni.get(rowIndex).getCena();
             case 4:
-        {
-            try {
-                return CommunicationController.getInstance().getSuma(racuni.get(rowIndex));
-            } catch (IOException ex) {
-                Logger.getLogger(TableModelIzvestaj.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+                return OtherMethods.getInstance().getSuma(racuni.get(rowIndex));
             case 5:
                 return racuni.get(rowIndex).getPredatoVreme();
             case 6:

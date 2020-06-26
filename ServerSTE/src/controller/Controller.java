@@ -6,17 +6,24 @@
 package controller;
 
 import domain.Korisnik;
-import domain.Prijemnica;
 import domain.Prtljag;
 import domain.Racun;
 import domain.Radnik;
 import domain.TipPrtljaga;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import service.ServiceKorisnik;
-import service.ServicePrijemnica;
 import service.ServicePrtljag;
 import service.ServiceRacun;
 import storage.impl.database.StorageDBRadnik;
@@ -34,7 +41,6 @@ public class Controller {
     private ServiceKorisnik serviceKorisnik;
     private ServicePrtljag servicePrtljag;
     private ServiceTipPrtljaga serviceTipPrtljaga;
-    private ServicePrijemnica servicePrijemnica;
     private ServiceRacun serviceRacun;
     
     private Controller() {
@@ -42,7 +48,6 @@ public class Controller {
           serviceKorisnik=new ServiceKorisnik();
           servicePrtljag=new ServicePrtljag();
           serviceTipPrtljaga=new ServiceTipPrtljaga();
-          servicePrijemnica=new ServicePrijemnica();
           serviceRacun = new ServiceRacun();
 
     }
@@ -108,35 +113,6 @@ public class Controller {
         }
         return null;
     }
-    public List<Prijemnica> vratiTrenutnoStanjePrijemnica(){
-        try {
-            ArrayList<Prijemnica> all=(ArrayList<Prijemnica>) servicePrijemnica.vratiPrijemnice();
-            ArrayList<Prijemnica> stanje=new ArrayList<>();
-            for(Prijemnica p:all){
-                if(p.isPreuzeto()==false)
-                    stanje.add(p);
-            }
-            return stanje;
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return new ArrayList<>();
-    }
-    public List<Prijemnica> vratiPreuzetePrijemnice(){
-        
-        try {
-            ArrayList<Prijemnica> all=(ArrayList<Prijemnica>) servicePrijemnica.vratiPrijemnice();
-            ArrayList<Prijemnica> preuzete=new ArrayList<>();
-            for(Prijemnica p:all){
-                if(p.isPreuzeto()==true)
-                    preuzete.add(p);
-            }
-            return preuzete;
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return new ArrayList<>();
-    }
     public Prtljag dodajPrtljag(Prtljag prtljag){
         Prtljag prt=null;
         try {
@@ -147,7 +123,6 @@ public class Controller {
         }
         return prt;
     }
-    
     public Racun dodajRacun(Racun racun){
         Racun rez=null;
         try {
@@ -179,38 +154,6 @@ public class Controller {
         }
         return istorija;
     }
-//    public User logIn(String username, String password) throws Exception{
-//        List<User> users=storageUser.getAll();
-//        for (User user : users) {
-//            if(user.getUsername().equalsIgnoreCase(username)){
-//                if(user.getPassword().equals(password)){
-//                    return user;
-//                }else{
-//                    throw new Exception("Lozinka nije odgovarajuća!");
-//                }
-//            }
-//        }
-//        throw new Exception("Korisnik nije registrovan!");
-//    }
-//    
-//    public List<Manufacturer> getAllManufacturers() throws Exception{
-//        //return storageManufacturer.getAll();
-//        return serviceManufacturer.getAll();
-//    }
-//    
-//    public void saveProduct(Product product) throws Exception{
-//        storageProduct.insert(product);
-//        
-//    }
-//    
-//    public List<Product> getAllProducts() throws Exception{
-//        return storageProduct.getAll();
-//    }
-//    
-//    public Invoice saveInvoice(Invoice invoice) throws Exception{
-//        return serviceInvoice.save(invoice);
-//    }
-
     public Racun odpremiRacun(Racun racun) {
         Racun rez=null;
         try {
@@ -221,6 +164,64 @@ public class Controller {
         }
         return rez;
     }
+    public Racun obrisiPrijemnicu(Racun racun) {
+        Racun rez=null;
+        try {
+            rez = serviceRacun.obrisiPrijemnicu(racun);
+            return rez;
+        } catch (Exception ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rez;
+    }
+    
+    public String stampajIzvestaj(List<Racun> racuni) {
+        String response="";
+        try {
+            try (PDDocument document = new PDDocument()) {
+                PDPage page = new PDPage();
+                LocalDate datum = LocalDate.now();           
+                    
+                try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                    PDImageXObject image=PDImageXObject.createFromFile("kofer.png", document);
+                    contentStream.drawImage(image, 10, 10);
+                    contentStream.beginText();
+                    contentStream.moveTextPositionByAmount(40, 700);
+                    contentStream.setFont(PDType1Font.COURIER, 24);
+                    contentStream.drawString("Izvestaj trenutnog stanja poslovanja");
+                    contentStream.newLineAtOffset(0,-15);
+                    contentStream.setFont(PDType1Font.COURIER, 12);
+                    contentStream.newLineAtOffset(0,-45);
+                    contentStream.drawString("Transakcije : ");
+                    contentStream.newLineAtOffset(0,-15);
+                    double suma=0;
+                    for (Racun racun : racuni) {
+                        String red="Racun : "+racun.getIdRacuna()+" Korisnik : "+racun.getKlijent().getIme()+" "+racun.getKlijent().getPrezime()+" Radnik : "+racun.getRadnik().getKorisnickoIme()+" Cena : "+racun.getCena();
+                        contentStream.drawString(red);
+                        contentStream.newLineAtOffset(0, -15);
+                        suma+=racun.getCena();
+                    }
+                    contentStream.newLineAtOffset(0, -50);
+                    contentStream.drawString("Ukupna suma zavedenih transakcija : "+Double.toString(suma)+" RSD.");
+                    contentStream.newLineAtOffset(0, -15);
+                    contentStream.setFont(PDType1Font.COURIER_BOLD_OBLIQUE, 14);
+                    contentStream.drawString("Izvestaj kreiran : "+datum.toString());
+                    contentStream.newLineAtOffset(0, -15);contentStream.newLineAtOffset(0, -15);
+                    contentStream.endText();
+                    contentStream.close();
+                }
+                document.addPage(page);
+                document.save("izvestaj"+datum.toString()+".pdf");
+            }
+            response="Sistem je odstampao izvestaj.";
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            response="Sistem ne moze da odstampa izvestaj.";
+        }
+        return response;
+    }
+
+    
 
     
     

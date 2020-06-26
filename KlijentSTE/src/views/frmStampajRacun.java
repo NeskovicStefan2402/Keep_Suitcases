@@ -7,7 +7,6 @@ package views;
 
 import components.TableModelStavkeRacuna;
 import controller.CommunicationController;
-import domain.Prijemnica;
 import java.util.Date;
 import domain.Racun;
 import java.io.IOException;
@@ -16,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import other.OtherMethods;
 
 /**
  *
@@ -316,9 +316,9 @@ public class frmStampajRacun extends javax.swing.JPanel {
 
         try {
             CommunicationController.getInstance().odpremiRacun(racun);
-            JOptionPane.showMessageDialog(this, "Uspesno ste odpremili racun "+racun.getIdRacuna()+" !");
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Nije moguce odpremiti racun!");
+            JOptionPane.showMessageDialog(this, "Sistem je uspesno kreirao racun \n Racun : "+racun.getIdRacuna());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Sistem ne moze da kreira racun. \n "+e.getStackTrace());
         }
         
     }//GEN-LAST:event_jBtnStampajPrijemnicuActionPerformed
@@ -353,26 +353,21 @@ public class frmStampajRacun extends javax.swing.JPanel {
     private javax.swing.JTextField txtTezina;
     // End of variables declaration//GEN-END:variables
     public void uPozadini(){
-        try {
-            TableModelStavkeRacuna model =new TableModelStavkeRacuna(racun.getStavke());
-            tblStavke.setModel(model);
-            lblId.setText(racun.getIdRacuna()+"");
-            txtIme.setText(racun.getKlijent().getIme());
-            txtPrezime.setText(racun.getKlijent().getPrezime());
-            txtKontakt.setText(racun.getKlijent().getKontaktBroj());
-            txtJMBG.setText(racun.getKlijent().getJMBG());
-            txtRadnik.setText(racun.getRadnik().getIme()+" "+racun.getRadnik().getPrezime());
-            txtTezina.setText(CommunicationController.getInstance().getSuma(racun)+" kg");
-            txtPredato.setText(racun.getPredatoVreme()+"");
-            LocalDateTime date=LocalDateTime.now();
-            txtPreuzeto.setText(date+"");
-            racun.setPreuzetoVreme(date);
-            float cena=CommunicationController.getInstance().getUkupnaCena(racun);
-            racun.setCena(cena);
-            txtCena.setText(cena+"");
-            
-        } catch (IOException ex) {
-            Logger.getLogger(frmStampajRacun.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        TableModelStavkeRacuna model =new TableModelStavkeRacuna(racun.getStavke());
+        tblStavke.setModel(model);
+        lblId.setText(racun.getIdRacuna()+"");
+        txtIme.setText(racun.getKlijent().getIme());
+        txtPrezime.setText(racun.getKlijent().getPrezime());
+        txtKontakt.setText(racun.getKlijent().getKontaktBroj());
+        txtJMBG.setText(racun.getKlijent().getJMBG());
+        txtRadnik.setText(racun.getRadnik().getIme()+" "+racun.getRadnik().getPrezime());
+        txtTezina.setText(OtherMethods.getInstance().getSuma(racun)+" kg");
+        txtPredato.setText(racun.getPredatoVreme()+"");
+        LocalDateTime date=LocalDateTime.now();
+        txtPreuzeto.setText(date+"");
+        racun.setPreuzetoVreme(date);
+        float cena=OtherMethods.getInstance().getUkupnaCena(racun);
+        racun.setCena(cena);
+        txtCena.setText(cena+"");
     }
 }

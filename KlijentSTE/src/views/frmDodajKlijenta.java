@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import other.OtherMethods;
 /**
  *
  * @author Stefan
@@ -170,7 +171,7 @@ public class frmDodajKlijenta extends javax.swing.JPanel {
     private void jBtnKreirajKlijentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnKreirajKlijentaActionPerformed
         if(!txtImeKlijenta.getText().isEmpty() && !txtPrezimeKlijenta.getText().isEmpty() && !txtJMBGKlijenta.getText().isEmpty()){
             try {
-                if(CommunicationController.getInstance().proveriFormatJMBG(txtJMBGKlijenta.getText())){
+                if(OtherMethods.getInstance().proveriFormatJMBG(txtJMBGKlijenta.getText())){
                     Korisnik korisnik = new Korisnik();
                     korisnik.setIme(txtImeKlijenta.getText());
                     korisnik.setPrezime(txtPrezimeKlijenta.getText());
@@ -178,43 +179,21 @@ public class frmDodajKlijenta extends javax.swing.JPanel {
                     korisnik.setKontaktBroj(txtKontaktKorisnik.getText());
                     korisnik.setIdRadnika(new Long(1)); //Promeniti na idRadnika
                         try{
-                            CommunicationController.getInstance().kreirajKorisnika(korisnik);
-                            JOptionPane.showMessageDialog(this, "Uspesno ste kreirali radnika!");
+                            Korisnik klijent=CommunicationController.getInstance().kreirajKorisnika(korisnik);
+                            JOptionPane.showMessageDialog(this, "Sistem je kreirao nalog klijenta. \n"
+                                    + "Klijent : "+klijent.getIme()+" "+klijent.getPrezime());
                         }catch(Exception e){
-                            JOptionPane.showMessageDialog(this, e.getStackTrace());
+                            JOptionPane.showMessageDialog(this, "Sistem ne moze da kreira nalog klijenta.\n"+e.getStackTrace());
                         }
                 }else{
                     JOptionPane.showMessageDialog(this,"Proverite strukturu unetih podataka!");
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(frmDodajKlijenta.class.getName()).log(Level.SEVERE, null, ex);
             }catch (Exception ex) {
                 Logger.getLogger(frmDodajKlijenta.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else{
         JOptionPane.showMessageDialog(this, "Popunite prazna polja!");
         }
-
-
-
-//        if(!jTxtImeKlijenta2.getText().isEmpty() && !jTxtImeKlijenta2.getText().isEmpty()){
-//            if(jTxtJMBGKlijenta.getText().length()==13){
-//                Klijent klijent=new Klijent();
-//                klijent.setIme(jTxtImeKlijenta2.getText());
-//                klijent.setPrezime(jTxtPrezimeKlijenta.getText());
-//                klijent.setJMBG(jTxtJMBGKlijenta.getText());
-//                if(!Controller.getInstance().daLiPostojiKlijent(klijent)){
-//                    Controller.getInstance().kreirajKlijenta(klijent);
-//                    JOptionPane.showMessageDialog(this, "Uspesno ste uneli klijenta !"); 
-//                }else{
-//                    JOptionPane.showMessageDialog(this, "Uneti klijent vec postoji u sistemu!");
-//                }
-//            }else{
-//                JOptionPane.showMessageDialog(this, "Polje JMBG nema 13 karaktera!");
-//            }
-//        }else{
-//            JOptionPane.showMessageDialog(this, "Popunite prazna polja");
-//        }
     }//GEN-LAST:event_jBtnKreirajKlijentaActionPerformed
 
     private void txtImeKlijentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtImeKlijentaActionPerformed

@@ -6,13 +6,13 @@
 package storage.impl.database;
 
 import dbConnection.DBConnection;
-import domain.Prijemnica;
 import domain.Racun;
 import domain.StavkaRacuna;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import service.ServiceKorisnik;
@@ -127,5 +127,25 @@ public class StorageDBRacun implements storage.storageRacun{
             throw new Exception(ex.getLocalizedMessage()+"Greska prilikom update-a Racuna u bazi!\n");
         }
     }
+
+    @Override
+    public Racun delete(Racun racun) throws Exception {
+        try{
+        String upit = "DELETE FROM racun WHERE id=?";
+        PreparedStatement statement=DBConnection.getInstance().getConnection().prepareStatement(upit);
+        statement.setLong(1, racun.getIdRacuna());
+        statement.executeUpdate();
+        statement.close();
+            System.out.println("Uspesan delete Racuna iz baze!");
+            DBConnection.getInstance().getConnection().commit();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            DBConnection.getInstance().getConnection().rollback();
+            throw new Exception(ex.getLocalizedMessage()+"Greska prilikom delete-a Racuna u bazu!\n");
+        }
+        return racun;
+    }
+    
+    
     
 }
